@@ -29,4 +29,22 @@ def register(api_key, secret_key, **kwargs):
         return "User Registered", True
     return json.loads(response.text)['error'], False
 
-    print(response.text)
+
+def login(username, password):
+    endpoint = f'{settings.API_HOST}login/'
+
+    payload = {
+
+        "password": password,
+        "username": username,
+
+    }
+    headers = {
+        'Content-Type': 'application/json',
+
+    }
+    response = requests.request("POST", endpoint, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "invalid credentials", False
