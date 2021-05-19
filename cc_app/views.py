@@ -76,6 +76,14 @@ def setting(request):
         return redirect(reverse("index"))
 
     response = api.get_currency(token=token)
+    if is_account_input_used:
+        get_input_data = api.get_input_data(
+            token=token,
+            input_id=input_id
+        )
+        if get_input_data[1]:
+            context["input_data"] = get_input_data[0]
+
     if response[1]:
         context["currencies"] = response[0]
     if request.POST:
@@ -109,4 +117,10 @@ def setting(request):
             )
             if update_response[1]:
                 context["message"] = "Input is updated successfully"
+                get_input_data = api.get_input_data(
+                    token=token,
+                    input_id=input_id
+                )
+                if get_input_data[1]:
+                    context["input_data"] = get_input_data[0]
     return render(request, "cc_app/settings.html", context=context)

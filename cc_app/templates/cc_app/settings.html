@@ -40,10 +40,39 @@
         </form>
 
         {% if message %}
-               <br>
+            <br>
             <div class="alert alert-dark">
                 <strong>{{ message }}</strong> </a>.
             </div>
             <br>
         {% endif %}
+        {% if input_data %}
+            <br>
+            <hr>
+            <h2>Registered Input</h2>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Starting Date</th>
+                    <th>Ending Date</th>
+                    <th>Currency</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ input_data.category }}</td>
+                    <td>{{ input_data.start_date }}</td>
+                    <td>{{ input_data.end_date }}</td>
+                    <td>{{ input_data.currency.name }}</td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        {% endif %}
+
 {% endblock %}

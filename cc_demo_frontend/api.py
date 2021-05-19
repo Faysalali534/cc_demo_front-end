@@ -115,6 +115,20 @@ def update_input(account, token, start_date, input_id, **kwargs):
 
     }
     response = requests.request("PUT", endpoint, headers=headers, data=json.dumps(payload))
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False
+
+
+def get_input_data(token, input_id):
+    endpoint = f'{settings.API_HOST}retrieve/input/{input_id}'
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("GET", endpoint, headers=headers)
     print("this is the update_input response", response)
     if response.status_code == 200:
         return json.loads(response.text), True
