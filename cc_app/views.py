@@ -16,7 +16,6 @@ def index(request):
             username=email
         )
         if response[1]:
-            print("this is response,", response[0])
             request.session['token'] = response[0]['token']
             request.session['account_id'] = response[0]['account_id']
             return redirect(reverse('portal'))
@@ -58,6 +57,9 @@ def portal(request):
 def logout(request):
     del request.session['token']
     del request.session['account_id']
+    del request.session['is_account_input_used']
+    del request.session['input_id']
+
     return redirect(reverse('index'))
 
 
@@ -72,14 +74,21 @@ def setting(request):
         context['currencies'] = response[0]
     if request.POST:
         start_date = request.POST.get("start_date")
-        Currency = request.POST.get("currency_capture")
+        currency = request.POST.get("currency_capture")
         end_date = request.POST.get("end_date")
         category = request.POST.get("category") or 'inverse'
-        print("this is the date",start_date)
-        print("this is the Currency",Currency)
-        print("this is the end_date",end_date)
-        print("this is the category",category)
+        insert_response = api.insert_input(
+            account=request.session['account_id'],
+            start_date=start_date,
+            end_date=end_date,
+            currency=currency,
+            category=category,
+            token=token
 
+        )
 
-
+        if insert_response[1]:
+            request.session['is_account_input_used'] = True
+            request.session['input_id'] = insert_response[0].get('id')
+            context['message'] = 'Input is added successfully'
     return render(request, 'cc_app/settings.html', context=context)

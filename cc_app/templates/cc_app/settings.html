@@ -38,4 +38,12 @@
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+
+        {% if message %}
+               <br>
+            <div class="alert alert-dark">
+                <strong>{{ message }}</strong> </a>.
+            </div>
+            <br>
+        {% endif %}
 {% endblock %}
