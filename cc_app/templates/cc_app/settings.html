@@ -29,7 +29,7 @@
                 <select id="currency" name="currency_capture" class="custom-select mb-3" required>
 
                     {% for currency in currencies %}
-                        <option value="{{ currency.id }}">{{ currency.name | title }}</option>
+                        <option value="{{ currency.id }}">{{ currency.name }}</option>
 
                     {% endfor %}
                 </select>
