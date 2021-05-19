@@ -91,3 +91,31 @@ def insert_input(account, token, start_date, **kwargs):
     if response.status_code == 201:
         return json.loads(response.text), True
     return "Error occured on server side", False
+
+
+def update_input(account, token, start_date, input_id, **kwargs):
+    currency = kwargs.get("currency")
+    end_date = kwargs.get("end_date")
+    category = kwargs.get("category")
+
+    endpoint = f'{settings.API_HOST}input/update/{input_id}'
+
+    payload = {
+
+        "account": int(account),
+        "start_date": start_date,
+        "currency": int(currency),
+        "end_date": end_date,
+        "category": category
+
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("PUT", endpoint, headers=headers, data=json.dumps(payload))
+    print("this is the update_input response", response)
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False

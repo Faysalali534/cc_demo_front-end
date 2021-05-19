@@ -18,6 +18,9 @@ def index(request):
         if response[1]:
             request.session['token'] = response[0]['token']
             request.session['account_id'] = response[0]['account_id']
+            request.session['is_account_input_used'] = response[0]['is_account_input_used']
+            request.session['input_id'] = response[0]['input_id']
+
             return redirect(reverse('portal'))
         context['message'] = response[0]
     return render(request, 'cc_app/index.html', context=context)
@@ -65,30 +68,45 @@ def logout(request):
 
 def setting(request):
     context = dict()
-    token = request.session.get('token')
+    token = request.session.get("token")
+    is_account_input_used = request.session.get("is_account_input_used")
+    input_id = request.session.get("input_id")
+
     if not token:
-        return redirect(reverse('index'))
+        return redirect(reverse("index"))
 
     response = api.get_currency(token=token)
     if response[1]:
-        context['currencies'] = response[0]
+        context["currencies"] = response[0]
     if request.POST:
         start_date = request.POST.get("start_date")
         currency = request.POST.get("currency_capture")
         end_date = request.POST.get("end_date")
-        category = request.POST.get("category") or 'inverse'
-        insert_response = api.insert_input(
-            account=request.session['account_id'],
-            start_date=start_date,
-            end_date=end_date,
-            currency=currency,
-            category=category,
-            token=token
+        category = request.POST.get("category") or "inverse"
+        if not bool(is_account_input_used):
+            insert_response = api.insert_input(
+                account=request.session["account_id"],
+                start_date=start_date,
+                end_date=end_date,
+                currency=currency,
+                category=category,
+                token=token,
+            )
 
-        )
-
-        if insert_response[1]:
-            request.session['is_account_input_used'] = True
-            request.session['input_id'] = insert_response[0].get('id')
-            context['message'] = 'Input is added successfully'
-    return render(request, 'cc_app/settings.html', context=context)
+            if insert_response[1]:
+                request.session["is_account_input_used"] = True
+                request.session["input_id"] = insert_response[0].get("id")
+                context["message"] = "Input is added successfully"
+        else:
+            update_response = api.update_input(
+                account=request.session["account_id"],
+                start_date=start_date,
+                end_date=end_date,
+                currency=currency,
+                category=category,
+                token=token,
+                input_id=input_id
+            )
+            if update_response[1]:
+                context["message"] = "Input is updated successfully"
+    return render(request, "cc_app/settings.html", context=context)
