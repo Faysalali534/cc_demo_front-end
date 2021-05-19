@@ -35,4 +35,4 @@ def sign_up(request):
 
 
 def portal(request):
-    return render(request, 'cc_app/base.html')
+    return render(request, 'cc_app/portal.html')
