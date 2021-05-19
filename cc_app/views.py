@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
 
 from cc_demo_frontend import api
 
@@ -15,12 +16,12 @@ def index(request):
             username=email
         )
         if response[1]:
-            print("this is response,",response[0])
+            print("this is response,", response[0])
             request.session['token'] = response[0]['token']
             request.session['account_id'] = response[0]['account_id']
-            return render(request, 'cc_app/portal.html')
+            return redirect(reverse('portal'))
         context['message'] = response[0]
-    return render(request, 'cc_app/index.html',context=context)
+    return render(request, 'cc_app/index.html', context=context)
 
 
 def sign_up(request):
@@ -49,4 +50,12 @@ def sign_up(request):
 
 
 def portal(request):
+    if not request.session.get('token'):
+        return redirect(reverse('index'))
     return render(request, 'cc_app/portal.html')
+
+
+def logout(request):
+    del request.session['token']
+    del request.session['account_id']
+    return redirect(reverse('index'))
