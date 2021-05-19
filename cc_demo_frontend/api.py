@@ -1,13 +1,32 @@
 import requests
+from django.conf import settings
+import json
 
-url = "http://127.0.0.1:8000/register/"
 
-payload="{\n    \"api_key\":\"adawxsaxaawdw\",\n    \"secret_key\":\"dawedxxxsawadwae\",\n    \"user\":{\n        \"password\":\"11323\",\n        \"email\":\"dwadwea12@acdascdas.com\",\n        \"first_name\":\"cascasdcas\",\n        \"last_name\":\"xaxasdac\"\n    }\n\n\n}"
-headers = {
-  'Content-Type': 'application/json',
-  'Cookie': 'csrftoken=gQYTzMYqDtmPyKGZByVHSjb3lUcQvziWtrnDE9kIgZCIPpn2AYYzb7eLJtXK6o6k; sessionid=qn3kqnjzfbp78ujawujdyb9j4m27t1zs'
-}
+def register(api_key, secret_key, **kwargs):
+    endpoint = f'{settings.API_HOST}register/'
+    first_name = kwargs.get('first_name')
+    email = kwargs.get('email')
+    last_name = kwargs.get('last_name')
+    password = kwargs.get('password')
+    payload = {
+        "api_key": api_key,
+        "secret_key": secret_key,
+        "user": {
+            "password": password,
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name
+        }
 
-response = requests.request("POST", url, headers=headers, data=payload)
+    }
+    headers = {
+        'Content-Type': 'application/json',
 
-print(response.text)
+    }
+    response = requests.request("POST", endpoint, headers=headers, data=json.dumps(payload))
+    if response.status_code == 201:
+        return "User Registered", True
+    return json.loads(response.text)['error'], False
+
+    print(response.text)
