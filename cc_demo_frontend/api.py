@@ -129,7 +129,44 @@ def get_input_data(token, input_id):
 
     }
     response = requests.request("GET", endpoint, headers=headers)
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False
+
+
+def get_account_detail(token, account_id):
+    endpoint = f'{settings.API_HOST}account/{account_id}'
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("GET", endpoint, headers=headers)
     print("this is the update_input response", response)
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False
+
+
+def update_account_detail(account_id, token, **kwargs):
+    secret_key = kwargs.get("secret_key")
+    api_key = kwargs.get("api_key")
+
+    endpoint = f'{settings.API_HOST}account/{account_id}'
+
+    payload = {
+
+        "api_key": api_key,
+        "secret_key": secret_key
+
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("PUT", endpoint, headers=headers, data=json.dumps(payload))
     if response.status_code == 200:
         return json.loads(response.text), True
     return "Error occured on server side", False

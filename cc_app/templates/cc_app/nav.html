@@ -12,8 +12,8 @@
             <li class="{% if title == 'settings' %}nav-item active{% else %}nav-item{% endif %}">
                 <a class="nav-link" href="{% url 'setting' %}">settings</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Profile</a>
+            <li class="{% if title == 'profile' %}nav-item active{% else %}nav-item{% endif %}">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>

@@ -1,0 +1,58 @@
+{% extends "cc_app/base.html" %}
+{% block content %}
+    {% include "cc_app/nav.html" with title="profile" %}
+
+    <main role="main" class="container">
+        <hr>
+        <h2>Profile Info</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="api_key">Api key</label>
+                <input type="text" class="form-control" id="api_key" placeholder="Enter Api Key"
+                       name="api_key" required>
+            </div>
+
+            <div class="form-group">
+                <label for="secret_key">Secret Key</label>
+                <input type="text" class="form-control" name="secret_key" id="secret_key"
+                       placeholder="Enter Secret Key" required>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        {% if message %}
+            <br>
+            <div class="alert alert-dark">
+                <strong>{{ message }}</strong> </a>.
+            </div>
+            <br>
+        {% endif %}
+        <br>
+        <hr>
+        <h2>Registered Keys</h2>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Api Key</th>
+                <th>Secret Key</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ account_detail.api_key }}</td>
+                <td>{{ account_detail.secret_key }}</td>
+
+
+            </tr>
+
+
+            </tbody>
+        </table>
+
+{% endblock %}

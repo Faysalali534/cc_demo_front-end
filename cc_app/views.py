@@ -124,3 +124,35 @@ def setting(request):
                 if get_input_data[1]:
                     context["input_data"] = get_input_data[0]
     return render(request, "cc_app/settings.html", context=context)
+
+
+def profile(request):
+    token = request.session.get("token")
+    context = dict()
+    if not token:
+        return redirect(reverse('index'))
+    get_account_detail_response = api.get_account_detail(
+        account_id=request.session["account_id"],
+        token=token
+    )
+    if get_account_detail_response[1]:
+        context["account_detail"] = get_account_detail_response[0]
+    if request.POST:
+        secret_key = request.POST.get("secret_key")
+        api_key = request.POST.get("api_key")
+        update_account_detail_response = api.update_account_detail(
+            account_id=request.session["account_id"],
+            token=token,
+            api_key=api_key,
+            secret_key=secret_key
+        )
+        if update_account_detail_response[1]:
+            context["message"] = "Account is updated successfully"
+            get_account_detail_response = api.get_account_detail(
+                account_id=request.session["account_id"],
+                token=token
+            )
+
+            if get_account_detail_response[1]:
+                context["account_detail"] = get_account_detail_response[0]
+    return render(request, 'cc_app/profile.html', context=context)
