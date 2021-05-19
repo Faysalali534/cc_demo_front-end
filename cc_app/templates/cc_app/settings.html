@@ -1,0 +1,41 @@
+{% extends "cc_app/base.html" %}
+{% block content %}
+    {% include "cc_app/nav.html" with title="settings" %}
+
+    <main role="main" class="container">
+        <hr>
+        <h2>Input settings</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" class="form-control" id="category" placeholder="Enter category (optional)"
+                       name="category">
+            </div>
+
+            <div class="form-group">
+                <label for="start_date">Starting Date</label>
+                <input type="datetime-local" class="form-control" name="start_date" id="start_date"
+                       placeholder="Enter Starting Date" required>
+            </div>
+            <div class="form-group">
+                <label for="end_date">Ending Date</label>
+                <input type="datetime-local" class="form-control" name="end_date" id="end_date"
+                       placeholder="Enter Ending Date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="currency">Currency</label>
+                <select id="currency" name="currency_capture" class="custom-select mb-3" required>
+
+                    {% for currency in currencies %}
+                        <option value="{{ currency.id }}">{{ currency.name | title }}</option>
+
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+{% endblock %}

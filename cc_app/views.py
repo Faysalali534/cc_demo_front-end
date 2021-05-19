@@ -59,3 +59,27 @@ def logout(request):
     del request.session['token']
     del request.session['account_id']
     return redirect(reverse('index'))
+
+
+def setting(request):
+    context = dict()
+    token = request.session.get('token')
+    if not token:
+        return redirect(reverse('index'))
+
+    response = api.get_currency(token=token)
+    if response[1]:
+        context['currencies'] = response[0]
+    if request.POST:
+        start_date = request.POST.get("start_date")
+        Currency = request.POST.get("currency_capture")
+        end_date = request.POST.get("end_date")
+        category = request.POST.get("category") or 'inverse'
+        print("this is the date",start_date)
+        print("this is the Currency",Currency)
+        print("this is the end_date",end_date)
+        print("this is the category",category)
+
+
+
+    return render(request, 'cc_app/settings.html', context=context)

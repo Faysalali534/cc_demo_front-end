@@ -48,3 +48,18 @@ def login(username, password):
     if response.status_code == 200:
         return json.loads(response.text), True
     return "invalid credentials", False
+
+
+def get_currency(token):
+    endpoint = f'{settings.API_HOST}currency/'
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("GET", endpoint, headers=headers)
+
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False
