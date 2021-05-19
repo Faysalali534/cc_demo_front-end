@@ -32,3 +32,7 @@ def sign_up(request):
         return render(request, "cc_app/signup.html", context=context)
 
     return render(request, "cc_app/signup.html")
+
+
+def portal(request):
+    return render(request, 'cc_app/base.html')
