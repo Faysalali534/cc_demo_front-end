@@ -76,6 +76,7 @@ def setting(request):
         return redirect(reverse("index"))
 
     response = api.get_currency(token=token)
+    exchanges = api.get_exchange(token=token)
     if is_account_input_used:
         get_input_data = api.get_input_data(
             token=token,
@@ -86,9 +87,12 @@ def setting(request):
 
     if response[1]:
         context["currencies"] = response[0]
+    if exchanges[1]:
+        context["exchanges"] = exchanges[0]
     if request.POST:
         start_date = request.POST.get("start_date")
         currency = request.POST.get("currency_capture")
+        exchange = request.POST.get("exchange")
         end_date = request.POST.get("end_date")
         category = request.POST.get("category") or "inverse"
         if not bool(is_account_input_used):
@@ -99,6 +103,7 @@ def setting(request):
                 currency=currency,
                 category=category,
                 token=token,
+                exchange=exchange
             )
 
             if insert_response[1]:
@@ -113,7 +118,8 @@ def setting(request):
                 currency=currency,
                 category=category,
                 token=token,
-                input_id=input_id
+                input_id=input_id,
+                exchange=exchange
             )
             if update_response[1]:
                 context["message"] = "Input is updated successfully"

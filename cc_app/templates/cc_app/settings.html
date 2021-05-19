@@ -34,6 +34,16 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="exchange">Exchanges</label>
+                <select id="exchange" name="exchange" class="custom-select mb-3" required>
+
+                    {% for exchange in exchanges %}
+                        <option value="{{ exchange.id }}">{{ exchange.name }}</option>
+
+                    {% endfor %}
+                </select>
+            </div>
 
 
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -58,6 +68,8 @@
                     <th>Starting Date</th>
                     <th>Ending Date</th>
                     <th>Currency</th>
+                    <th>Exchange</th>
+
 
                 </tr>
                 </thead>
@@ -67,6 +79,8 @@
                     <td>{{ input_data.start_date }}</td>
                     <td>{{ input_data.end_date }}</td>
                     <td>{{ input_data.currency.name }}</td>
+                    <td>{{ input_data.exchange.name }}</td>
+
 
                 </tr>
 

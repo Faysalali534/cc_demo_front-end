@@ -69,6 +69,7 @@ def insert_input(account, token, start_date, **kwargs):
     currency = kwargs.get("currency")
     end_date = kwargs.get("end_date")
     category = kwargs.get("category")
+    exchange = kwargs.get("exchange")
 
     endpoint = f'{settings.API_HOST}input/'
 
@@ -78,7 +79,8 @@ def insert_input(account, token, start_date, **kwargs):
         "start_date": start_date,
         "currency": int(currency),
         "end_date": end_date,
-        "category": category
+        "category": category,
+        "exchange": exchange
 
     }
     headers = {
@@ -97,6 +99,7 @@ def update_input(account, token, start_date, input_id, **kwargs):
     currency = kwargs.get("currency")
     end_date = kwargs.get("end_date")
     category = kwargs.get("category")
+    exchange = kwargs.get("exchange")
 
     endpoint = f'{settings.API_HOST}input/update/{input_id}'
 
@@ -106,7 +109,8 @@ def update_input(account, token, start_date, input_id, **kwargs):
         "start_date": start_date,
         "currency": int(currency),
         "end_date": end_date,
-        "category": category
+        "category": category,
+        "exchange": exchange
 
     }
     headers = {
@@ -167,6 +171,21 @@ def update_account_detail(account_id, token, **kwargs):
 
     }
     response = requests.request("PUT", endpoint, headers=headers, data=json.dumps(payload))
+    if response.status_code == 200:
+        return json.loads(response.text), True
+    return "Error occured on server side", False
+
+
+def get_exchange(token):
+    endpoint = f'{settings.API_HOST}exchange/'
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {token}'
+
+    }
+    response = requests.request("GET", endpoint, headers=headers)
+
     if response.status_code == 200:
         return json.loads(response.text), True
     return "Error occured on server side", False
