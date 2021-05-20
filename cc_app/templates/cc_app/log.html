@@ -12,6 +12,7 @@
             <script>
     $(document).ready(function () {
         $(document).ready(function () {
+            gettingLog()
             setInterval(()=> {gettingLog()}, 5000)
         })
     })
@@ -40,12 +41,12 @@
             columns:[
                 {title:"Info", field:"info"},
                 {title:"status", field:"status"},
-                {title:"Input Id", field:"input.id"},
-                {title:"Start Date", field:"input.start_date"},
-                {title:"End Date", field:"input.end_date"},
-                {title:"Category", field:"input.category"},
-                {title:"Currency", field:"input.currency.name"},
-                {title:"Exchange", field:"input.exchange.name"},
+                {title:"Input Id", field:"input_id"},
+                {title:"Start Date", field:"start_date"},
+                {title:"End Date", field:"end_date"},
+                {title:"Category", field:"category"},
+                {title:"Currency", field:"currency.name"},
+                {title:"Exchange", field:"exchange.name"},
             ],
             // autoColumns:true,
         });
