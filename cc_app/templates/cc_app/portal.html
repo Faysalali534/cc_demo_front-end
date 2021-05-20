@@ -48,6 +48,10 @@
     <script>
         $(document).ready(function () {
             ajaxCall()
+
+            setInterval(() => {
+                backgroundTask()
+            }, 12000)
             setInterval(() => {
                 ajaxCall()
             }, 5000)
@@ -111,6 +115,23 @@
                 }
             }).fail(function () {
                 alert("Request Failed!");
+            });
+        }
+
+        function backgroundTask() {
+            var settings = {
+                "url": "{{ api_host }}generate/queue",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Authorization": "Token {{token}}",
+                    "Content-Type": "application/json",
+                },
+                "data": JSON.stringify({"input_data_id":{{input}}}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
             });
         }
 
