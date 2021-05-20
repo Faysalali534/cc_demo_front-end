@@ -112,6 +112,8 @@
                     }
                     creatngChart(xValues, yValues)
                     creatingTable(response);
+                      var mesgBox = document.getElementsByClassName('messageBox')[0];
+                      mesgBox.style.display = "none"
                 }
             }).fail(function () {
                 alert("Request Failed!");
