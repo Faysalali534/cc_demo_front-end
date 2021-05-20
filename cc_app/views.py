@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from cc_demo_frontend import api
+from django.conf import settings
 
 
 def index(request):
@@ -52,9 +53,15 @@ def sign_up(request):
 
 
 def portal(request):
-    if not request.session.get('token'):
-        return redirect(reverse('index'))
-    return render(request, 'cc_app/portal.html')
+    if not request.session.get("token"):
+        return redirect(reverse("index"))
+    context = dict(
+        api_host=settings.API_HOST,
+        token=request.session.get("token"),
+        input=request.session["input_id"],
+    )
+    return render(request, "cc_app/portal.html", context=context)
+
 
 
 def logout(request):
@@ -162,3 +169,14 @@ def profile(request):
             if get_account_detail_response[1]:
                 context["account_detail"] = get_account_detail_response[0]
     return render(request, 'cc_app/profile.html', context=context)
+
+
+def log(request):
+    if not request.session.get('token'):
+        return redirect(reverse('index'))
+    context = dict(
+        api_host=settings.API_HOST,
+        token=request.session.get("token"),
+        input=request.session["input_id"],
+    )
+    return render(request, 'cc_app/log.html',context=context)

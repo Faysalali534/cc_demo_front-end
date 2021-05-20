@@ -1,81 +1,127 @@
 {% extends "cc_app/base.html" %}
 {% block content %}
     {% include "cc_app/nav.html" with title="home" %}
+    <style>
+        .chart {
+            width: 80%;
+            margin: 0 auto;
+        }
 
+        .chart-wrapper {
+            margin-bottom: 50px;
+        }
+
+        .messageBox {
+            display: none;
+            width: 70%;
+            margin: 20px auto;
+            border: 1px solid black;
+            border-radius: 15px;
+            padding: 25px;
+        }
+    </style>
     <main role="main" class="container">
         <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
             <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt=""
                  width="48" height="48">
             <div class="lh-100">
-                <h6 class="mb-0 text-white lh-100">Moonwalk</h6>
+                <h6 class="mb-0 text-white lh-100">Moon Walker Growth</h6>
                 <small>Since 2011</small>
             </div>
         </div>
-        <div class="my-3 p-3 bg-white rounded box-shadow">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@username</strong>
-                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-                </p>
+        <div class="chart">
+            <div class="chart-wrapper">
+                <canvas id="myChart"></canvas>
             </div>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=e83e8c&fg=e83e8c&size=1" alt="" class="mr-2 rounded">
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@username</strong>
-                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-                </p>
+            <div id="chartTable"></div>
+            <hr>
+            <div class="panel panel-primary messageBox">
+                <div class="panel-heading text-center"><h3>There are no records.</h3></div>
+                <div class="panel-body text-center">
+                    <button type="button" class="btn btn-dark btn-lg">Check Logs</button>
+                </div>
             </div>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=6f42c1&fg=6f42c1&size=1" alt="" class="mr-2 rounded">
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@username</strong>
-                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-                </p>
-            </div>
-            <small class="d-block text-right mt-3">
-                <a href="#">All updates</a>
-            </small>
         </div>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        <div class="my-3 p-3 bg-white rounded box-shadow">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Suggestions</h6>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
-                <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <strong class="text-gray-dark">Full Name</strong>
-                        <a href="#">Follow</a>
-                    </div>
-                    <span class="d-block">@username</span>
-                </div>
-            </div>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
-                <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <strong class="text-gray-dark">Full Name</strong>
-                        <a href="#">Follow</a>
-                    </div>
-                    <span class="d-block">@username</span>
-                </div>
-            </div>
-            <div class="media text-muted pt-3">
-                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
-                <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <strong class="text-gray-dark">Full Name</strong>
-                        <a href="#">Follow</a>
-                    </div>
-                    <span class="d-block">@username</span>
-                </div>
-            </div>
-            <small class="d-block text-right mt-3">
-                <a href="#">All suggestions</a>
-            </small>
-        </div>
+    <script>
+        $(document).ready(function () {
+            ajaxCall()
+            setInterval(() => {
+                ajaxCall()
+            }, 5000)
+        })
+
+        function creatngChart(xValues, yValues) {
+            new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'ROI',
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "black",
+                        borderColor: "black",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {display: true, text: 'ROI'},
+                    legend: {display: true},
+                    scales: {
+                        yAxes: [{
+                            ticks: {min: 0, max: 100}
+                        }],
+                    }
+                }
+            });
+        }
+
+        function ajaxCall() {
+            var xValues = [], yValues = [], idArray = [], url = "{{ api_host }}Recorded/Data/{{input}}";
+            var settings = {
+                "url": url,
+                "method": "GET",
+                "timeout": 0,
+                "headers": {
+                    "Authorization": "Token {{token}}"
+                },
+            };
+
+            $.ajax(settings).done(function (response) {
+                if (response[0] == null) {
+                    var mesgBox = document.getElementsByClassName('messageBox')[0];
+                    mesgBox.style.display = "block"
+                } else {
+                    for (var j = 0; j <= response.length - 1; j++) {
+                        idArray.push(response[j].id)
+                    }
+                    var highestId = Math.max(...idArray)
+                    var lowestId = highestId - 12
+                    for (var i = 0; i <= response.length - 1; i++) {
+                        if (lowestId < response[i].id && response[i].id <= highestId) {
+                            xValues.push(response[i].captured_date);
+                            yValues.push(response[i].roi);
+                        }
+                    }
+                    creatngChart(xValues, yValues)
+                    creatingTable(response);
+                }
+            }).fail(function () {
+                alert("Request Failed!");
+            });
+        }
+
+        function creatingTable(resp) {
+            var tableData = resp
+            var table = new Tabulator("#chartTable", {
+                data: tableData,
+                autoColumns: true,
+            });
+        }
+    </script>
+
+
 {% endblock %}

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Moonwalk</a>
+    <a class="navbar-brand" href="#">Moon Walker Growth</a>
     <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -14,6 +14,9 @@
             </li>
             <li class="{% if title == 'profile' %}nav-item active{% else %}nav-item{% endif %}">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+         <li class="{% if title == 'logs' %}nav-item active{% else %}nav-item{% endif %}">
+                <a class="nav-link" href="{% url 'log' %}">Log</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
